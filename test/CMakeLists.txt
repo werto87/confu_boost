@@ -1,14 +1,11 @@
-set(TEST_TARGET_NAME _test)
-add_executable(${TEST_TARGET_NAME} 
-"main.cxx"
-"test.cxx"
-"constant.hxx"
- )
-target_link_libraries(${TEST_TARGET_NAME}
-${PROJECT_OPTIONS}
-CONAN_PKG::catch2
+set(TEST_SOURCES_${TARGET_NAME} ${TEST_SOURCES_${TARGET_NAME}}
+${CMAKE_CURRENT_SOURCE_DIR}/main.cxx 
+${CMAKE_CURRENT_SOURCE_DIR}/test.cxx
+PARENT_SCOPE
 )
-target_include_directories(${TEST_TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
 
-add_test(NAME ${TEST_TARGET_NAME}
-         COMMAND ${TEST_TARGET_NAME} -r junit) 
+
+set(TEST_HEADER_${TARGET_NAME} ${TEST_HEADER_${TARGET_NAME}}
+${CMAKE_CURRENT_SOURCE_DIR}/constant.hxx
+PARENT_SCOPE
+)
