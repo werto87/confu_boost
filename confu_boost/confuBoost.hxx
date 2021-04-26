@@ -5,6 +5,8 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 #include <boost/fusion/adapted/struct/define_struct.hpp>
 #include <boost/fusion/algorithm/query/count.hpp>
@@ -38,7 +40,6 @@
 #include <string>
 #include <tuple>
 #include <type_traits>
-
 template <class Archive, typename T>
 void
 boostSerializationHelper (Archive &ar, T &t)
@@ -70,4 +71,27 @@ boostSerializationHelper (Archive &ar, T &t)
   }
 #endif
 // clang-format on
+
+template <typename TypeToTransform>
+std::string
+toString (TypeToTransform const &typeToTransform)
+{
+  auto typeToTransformStream = std::stringstream{};
+  boost::archive::text_oarchive typeToTransformArchive{ typeToTransformStream };
+  typeToTransformArchive << typeToTransform;
+  return typeToTransformStream.str ();
+}
+
+template <typename TypeToTransform>
+TypeToTransform
+toObject (std::string const &objectAsString)
+{
+  auto stringStream = std::stringstream{};
+  stringStream << objectAsString;
+  boost::archive::text_iarchive ia (stringStream);
+  auto typeToTransform = TypeToTransform{};
+  ia >> typeToTransform;
+  return typeToTransform;
+}
+
 #endif /* AEB527E1_1664_4D1C_9D70_BFD5E18095D6 */
