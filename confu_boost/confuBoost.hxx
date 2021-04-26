@@ -71,7 +71,8 @@ boostSerializationHelper (Archive &ar, T &t)
   }
 #endif
 // clang-format on
-
+namespace confu_boost
+{
 template <typename TypeToTransform>
 std::string
 toString (TypeToTransform const &typeToTransform)
@@ -93,5 +94,5 @@ toObject (std::string const &objectAsString)
   ia >> typeToTransform;
   return typeToTransform;
 }
-
+}
 #endif /* AEB527E1_1664_4D1C_9D70_BFD5E18095D6 */
