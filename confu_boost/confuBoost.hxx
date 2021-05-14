@@ -25,6 +25,7 @@
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/optional/optional_io.hpp>
+#include <boost/serialization/optional.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/type_index.hpp>
@@ -48,9 +49,7 @@ template <class Archive, typename T>
 void
 boostSerializationHelper (Archive &ar, T &t)
 {
-  boost::fusion::for_each (boost::mpl::range_c<unsigned, 0, boost::fusion::result_of::size<T>::value> (), [&] (auto index) {
-    ar &boost::fusion::at_c<index> (t);
-  });
+  boost::fusion::for_each (boost::mpl::range_c<unsigned, 0, boost::fusion::result_of::size<T>::value> (), [&] (auto index) { ar &boost::fusion::at_c<index> (t); });
 }
 
 // dont use BOOST_SERIALIZATION_BOILER_PLATE in a namespace
