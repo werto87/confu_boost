@@ -6,7 +6,22 @@
 #include <string>
 
 BOOST_FUSION_DEFINE_STRUCT ((database), Character, (std::string, id) (std::string, positionId) (std::string, accountId))
+
 BOOST_SERIALIZATION_BOILER_PLATE (database::Character)
+
+namespace enumTest
+{
+enum struct SomeEnum
+{
+  value0,
+  value1
+};
+}
+
+BOOST_FUSION_DEFINE_STRUCT ((enumTest), StructWithEnum, (enumTest::SomeEnum, id))
+
+BOOST_SERIALIZATION_BOILER_PLATE (enumTest::StructWithEnum)
+
 namespace test
 {
 
@@ -16,6 +31,12 @@ TEST_CASE ("struct to text")
   boost::archive::text_oarchive characterArchive{ characterStringStream };
   characterArchive << database::Character{ .id = "id", .positionId = "positionId", .accountId = "accountId" };
   REQUIRE (characterStringStream.str () == "22 serialization::archive 18 0 0 2 id 10 positionId 9 accountId");
+}
+
+TEST_CASE ("struct to text with enum and toString function")
+{
+  //
+  REQUIRE (confu_boost::toString (enumTest::StructWithEnum{}) == "22 serialization::archive 18 0 0 0");
 }
 
 TEST_CASE ("text to struct")

@@ -45,14 +45,7 @@ void
 boostSerializationHelper (Archive &ar, T &t)
 {
   boost::fusion::for_each (boost::mpl::range_c<unsigned, 0, boost::fusion::result_of::size<T>::value> (), [&] (auto index) {
-    if constexpr (std::is_enum<typename boost::fusion::result_of::value_at_c<T, index>::type>::value)
-      {
-        ar &magic_enum::enum_name (boost::fusion::at_c<index> (t));
-      }
-    else
-      {
-        ar &boost::fusion::at_c<index> (t);
-      }
+    ar &boost::fusion::at_c<index> (t);
   });
 }
 
@@ -73,6 +66,7 @@ boostSerializationHelper (Archive &ar, T &t)
 // clang-format on
 namespace confu_boost
 {
+
 template <typename TypeToTransform>
 std::string
 toString (TypeToTransform const &typeToTransform)
