@@ -52,7 +52,7 @@ TEST_CASE ("struct to text with enum and toString function")
   REQUIRE (objectAsString == "22 serialization::archive 18 0 0 0 0 1 0 0 0 13 0 1 1 0 0 2 id 10 positionId 9 accountId");
   auto object1 = confu_boost::toObject<durak::GameData> (objectAsString);
   REQUIRE (object1.table.at (0).first == 13);
-  // REQUIRE (object1.table.at (0).second.value () == 37);
+  REQUIRE (object1.table.at (0).second.value () == 37);
   REQUIRE (objectAsString == confu_boost::toString (object1));
 }
 
