@@ -40,6 +40,7 @@
 #include <string>
 #include <tuple>
 #include <type_traits>
+#include <boost/serialization/vector.hpp>
 template <class Archive, typename T>
 void
 boostSerializationHelper (Archive &ar, T &t)
