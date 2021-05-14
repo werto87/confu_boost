@@ -22,6 +22,16 @@ BOOST_FUSION_DEFINE_STRUCT ((enumTest), StructWithEnum, (enumTest::SomeEnum, id)
 
 BOOST_SERIALIZATION_BOILER_PLATE (enumTest::StructWithEnum)
 
+namespace durak
+{
+struct GameData
+{
+  std::vector<std::pair<int, int>> table{};
+};
+}
+
+BOOST_FUSION_ADAPT_STRUCT (durak::GameData, table)
+BOOST_SERIALIZATION_BOILER_PLATE (durak::GameData)
 namespace test
 {
 
@@ -36,7 +46,7 @@ TEST_CASE ("struct to text")
 TEST_CASE ("struct to text with enum and toString function")
 {
   //
-  REQUIRE (confu_boost::toString (enumTest::StructWithEnum{}) == "22 serialization::archive 18 0 0 0");
+  REQUIRE (confu_boost::toString (durak::GameData{ .table = { std::pair<int, int>{ 13, 37 } } }) == "22 serialization::archive 18 0 0 0 0 1 0 0 0 13 37");
 }
 
 TEST_CASE ("text to struct")

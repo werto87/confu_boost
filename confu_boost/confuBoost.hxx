@@ -25,6 +25,8 @@
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/optional/optional_io.hpp>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/vector.hpp>
 #include <boost/type_index.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/uuid/uuid.hpp>
@@ -35,12 +37,13 @@
 #include <iostream>
 #include <istream>
 #include <magic_enum.hpp>
+#include <memory>
 #include <ostream>
 #include <sstream>
 #include <string>
 #include <tuple>
 #include <type_traits>
-#include <boost/serialization/vector.hpp>
+
 template <class Archive, typename T>
 void
 boostSerializationHelper (Archive &ar, T &t)
