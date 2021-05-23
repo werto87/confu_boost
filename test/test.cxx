@@ -27,7 +27,7 @@ namespace durak
 {
 struct GameData
 {
-  std::vector<std::pair<int, boost::optional<database::Character>>> table{};
+  std::vector<std::pair<int, boost::optional<int>>> table{};
 };
 }
 
@@ -46,10 +46,8 @@ TEST_CASE ("struct to text")
 
 TEST_CASE ("struct to text with enum and toString function")
 {
-  //
-  auto object = durak::GameData{ .table = { std::pair<int, database::Character>{ 13, database::Character{ .id = "id", .positionId = "positionId", .accountId = "accountId" } } } };
+  auto object = durak::GameData{ .table = { std::pair<int, int>{ 13, 37 } } };
   auto objectAsString = confu_boost::toString (object);
-  REQUIRE (objectAsString == "22 serialization::archive 18 0 0 0 0 1 0 0 0 13 0 1 1 0 0 2 id 10 positionId 9 accountId");
   auto object1 = confu_boost::toObject<durak::GameData> (objectAsString);
   REQUIRE (object1.table.at (0).first == 13);
   REQUIRE (object1.table.at (0).second.value () == 37);

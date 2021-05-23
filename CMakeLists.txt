@@ -87,7 +87,6 @@ IF(BUILD_TESTS)
     ${PROJECT_OPTIONS}
     CONAN_PKG::catch2
     CONAN_PKG::boost
-    CONAN_PKG::magic_enum
   )
   if (CMAKE_BINARY_DIR)
     target_compile_definitions(${TEST_TARGET_NAME} PRIVATE PATH_TO_BINARY="${CMAKE_BINARY_DIR}")
@@ -122,7 +121,6 @@ target_include_directories(${TARGET_NAME} PRIVATE
 
 target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_WARNINGS} ${PROJECT_OPTIONS}
 CONAN_PKG::boost
-CONAN_PKG::magic_enum
 )
 
 

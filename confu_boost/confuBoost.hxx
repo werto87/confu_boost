@@ -37,7 +37,6 @@
 #include <filesystem>
 #include <iostream>
 #include <istream>
-#include <magic_enum.hpp>
 #include <memory>
 #include <ostream>
 #include <sstream>
