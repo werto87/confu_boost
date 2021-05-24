@@ -97,26 +97,44 @@ ${HEADER_${TARGET_NAME}}
 
 
 
+if(BUILD_WASM)
 target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_include_directories(${TARGET_NAME} PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-  IF(BUILD_WASM)
   /home/walde/some_boost_test/modular-boost
-  ENDIF(BUILD_WASM)
-  )
+)
+else()
+target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(${TARGET_NAME} PRIVATE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+endif()
+
+
   
+
+if(BUILD_WASM)
 target_link_directories(${TARGET_NAME} PRIVATE
-IF(BUILD_WASM)
-/home/walde/some_boost_test/modular-boost/stage/lib
-ENDIF(BUILD_WASM)
+  /home/walde/some_boost_test/modular-boost/stage/lib
  )
 
-target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_WARNINGS} ${PROJECT_OPTIONS}
+
+else()
+target_link_directories(${TARGET_NAME} PRIVATE
+ )
+endif()
+
+
 
 IF(BUILD_WASM)
-libboost_serialization.a
-ELSE
-CONAN_PKG::boost
-ENDIF(BUILD_WASM)
-)
+  target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_WARNINGS} ${PROJECT_OPTIONS}
+  libboost_serialization.a
+  )
+ELSE()
+  target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_WARNINGS} ${PROJECT_OPTIONS}
+  CONAN_PKG::boost
+  )
+ENDIF()
+
