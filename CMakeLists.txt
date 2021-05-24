@@ -1,11 +1,3 @@
- #set(CMAKE_CXX_COMPILER "/usr/local/bin/clang++")
- #set(CMAKE_C_COMPILER "/usr/local/bin/clang")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcoroutines")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld")
-#-fcoroutines-ts -lc++experimental")
-
-#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread -v")
 cmake_minimum_required(VERSION 3.17)
 project(convenienceFunctionForSoci VERSION 1.0.0
   DESCRIPTION convenienceFunctionForSoci
@@ -32,14 +24,7 @@ set(PROJECT_OPTIONS project_options)
 
 add_library(${PROJECT_OPTIONS} INTERFACE)
 target_compile_features(${PROJECT_OPTIONS} INTERFACE cxx_std_20)
-#target_compile_options(${PROJECT_OPTIONS} INTERFACE -ftime-trace)
-# target_precompile_headers(${PROJECT_OPTIONS} INTERFACE 
-# /home/walde/.conan/data/boost/1.74.0/_/_/package/23a9767f828c6565e4789a33218c8ed06b1803d6/include/boost/algorithm/string.hpp
-# /home/walde/.conan/data/boost/1.74.0/_/_/package/23a9767f828c6565e4789a33218c8ed06b1803d6/include/boost/asio.hpp
-# /home/walde/.conan/data/boost/1.74.0/_/_/package/23a9767f828c6565e4789a33218c8ed06b1803d6/include/boost/beast.hpp
-# /home/walde/.conan/data/boost/1.74.0/_/_/package/23a9767f828c6565e4789a33218c8ed06b1803d6/include/boost/range/adaptor/indexed.hpp
-# /home/walde/.conan/data/boost/1.74.0/_/_/package/23a9767f828c6565e4789a33218c8ed06b1803d6/include/boost/bind.hpp
-# )
+
 
 
 # include(cmake/Sanitizers.cmake)
@@ -47,8 +32,13 @@ target_compile_features(${PROJECT_OPTIONS} INTERFACE cxx_std_20)
 
 # allow for static analysis options
 #include(cmake/StaticAnalyzers.cmake) 
- 
+
+OPTION(BUILD_WASM "build wasm" OFF)
+
 ######## conan setup
+IF(BUILD_WASM)
+SET(CONAN_DISABLE_CHECK_COMPILER ON)
+ENDIF(BUILD_WASM)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
@@ -68,7 +58,7 @@ set_target_properties(${TARGET_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 add_subdirectory(confu_boost) 
 
 ####### create executable
-OPTION(BUILD_TESTS "enable tests" ON)
+OPTION(BUILD_TESTS "enable tests" OFF)
 IF(BUILD_TESTS)
 
   enable_testing()
@@ -99,11 +89,6 @@ ENDIF(BUILD_TESTS)
 
 
 
-####### include what you use
-#find_program(iwyu_path NAMES include-what-you-use iwyu)
-#set_property(TARGET ${TARGET_SERVER_NAME} PROPERTY CXX_INCLUDE_WHAT_YOU_USE ${iwyu_path})
-# set_property(TARGET ${TARGET_NAME} PROPERTY CXX_INCLUDE_WHAT_YOU_USE ${iwyu_path})
-
 target_sources(${TARGET_NAME} PRIVATE 
 ${SOURCES_${TARGET_NAME}}
 ${HEADER_${TARGET_NAME}}
@@ -116,18 +101,22 @@ target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_include_directories(${TARGET_NAME} PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+  IF(BUILD_WASM)
+  /home/walde/some_boost_test/modular-boost
+  ENDIF(BUILD_WASM)
   )
   
+target_link_directories(${TARGET_NAME} PRIVATE
+IF(BUILD_WASM)
+/home/walde/some_boost_test/modular-boost/stage/lib
+ENDIF(BUILD_WASM)
+ )
 
 target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_WARNINGS} ${PROJECT_OPTIONS}
+
+IF(BUILD_WASM)
+libboost_serialization.a
+ELSE
 CONAN_PKG::boost
+ENDIF(BUILD_WASM)
 )
-
-
-
-#print all variables used in cmake
-# get_cmake_property(_variableNames VARIABLES)
-# list (SORT _variableNames)
-# foreach (_variableName ${_variableNames})
-#    message(STATUS "${_variableName}=${${_variableName}}")
-# endforeach()

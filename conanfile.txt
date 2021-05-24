@@ -1,9 +1,6 @@
 [requires]
-boost/1.75.0
-# fmt/7.0.3
-# imgui-sfml/2.1@bincrafters/stable
-# soci/4.0.1
-catch2/2.13.1
+ boost/1.76.0   #disable this when building for emscripten
+ catch2/2.13.1 #disable this when building for emscripten
 [generators]
 cmake
 [options]
@@ -11,3 +8,6 @@ cmake
 # soci:with_boost=True
 #sfml:audio=False
 #flac:use_asm= False
+# boost:with_stacktrace_backtrace=False
+# boost:bzip2=False
+# boost:zlib=False
